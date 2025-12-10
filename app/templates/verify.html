@@ -1,32 +1,27 @@
-<!doctype html>
-<html>
-    <head>
-        <title>{{ title }} - Sticker Printer</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    </head>
-    <body>
-        <form action="" method="POST" novalidate>
-            {{ form.hidden_tag() }}
-            <div>
-                <img src="/static/chosen_sticker.png"
-                     alt="Stickers"
-                     width="587"
-                     height="757"
-                     class="img-left">
-                
-                <h2>Is this what you want to print?</h2>
-                <br>
-                <h2>{{ address.line0 }}</h2>
-                <h2>{{ address.line1 }}</h2>
-                <h2>{{ address.line2 }}</h2>
-                <br>
-                <h2>Make sure paper is put BLUE SIDE DOWN, then press print below</h2>
-                <p>
-                    {{ form.submit(class='btn') }}
-                    {{ form.cancel(class='btn btn-red') }}
-                </p>
-            </div>
-        </form>
-        <br><br><br><br>
-    </body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+    <form action="" method="POST" novalidate>
+        {{ form.hidden_tag() }}
+        <div>
+            <img src="/static/chosen_sticker.png"
+                    alt="Stickers"
+                    width="587"
+                    height="757"
+                    class="img-left">
+            
+            <h2>Is this what you want to print?</h2>
+            <br>
+            <h2>{{ address.line0 }}</h2>
+            <h2>{{ address.line1 }}</h2>
+            <h2>{{ address.line2 }}</h2>
+            <br>
+            <h2>Make sure paper is put BLUE SIDE DOWN, then press print below</h2>
+            <p>
+                {{ form.submit(class='btn') }}
+                {{ form.cancel(class='btn btn-red') }}
+            </p>
+        </div>
+    </form>
+    <br><br><br><br>
+{% endblock %}

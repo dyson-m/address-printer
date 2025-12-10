@@ -1,21 +1,16 @@
-<!doctype html>
-<html>
-    <head>
-        <title>{{ title }} - Sticker Printer</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    </head>
-    <body>
-        <form action="" method="POST" novalidate>
-            {{ form.hidden_tag() }}
-            <h2>{{ address.prompt }}</h2>
-            <p>
-                {{ form.inputLine(class='larger') }}
-                {{ form.submit(class='btn') }}
-            </p>
-            <br>
-            <h2>{{ address.line0 }}</h2>
-            <h2>{{ address.line1 }}</h2>
-            <h2>{{ address.line2 }}</h2>
-        </form>
-    </body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+    <form action="" method="POST" novalidate>
+        {{ form.hidden_tag() }}
+        <h2>{{ address.prompt }}</h2>
+        <p>
+            {{ form.inputLine(class='larger') }}
+            {{ form.submit(class='btn') }}
+        </p>
+        <br>
+        <h2>{{ address.line0 }}</h2>
+        <h2>{{ address.line1 }}</h2>
+        <h2>{{ address.line2 }}</h2>
+    </form>
+{% endblock %}
