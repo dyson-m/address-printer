@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+    <head>
+        <title>{{ title }} - Sticker Printer</title>
+        <style>
+            #larger {
+                font-size: 40px;
+                }
+            h2 {
+                font-size: 40px;
+            }
+            img {
+                float: left;
+            }
+        </style>
+
+    </head>
+    <body>
+        <form action="" method="POST" novalidate>
+            {{ form.hidden_tag() }}
+            <div>
+                <img src="/static/chosen_sticker.png" alt="Stickers" width="587" height="757">
+                
+                <h2>Is this what you want to print?</h2>
+                <br>
+                <h2>
+                    {{ address.line0 }}
+                </h2>
+                <h2>
+                    {{ address.line1 }}
+                </h2>
+                <h2>
+                    {{ address.line2 }}
+                </h2>
+                <br>
+                <h2>
+                    Make sure that the printer paper
+                </h2>
+                <h2>
+                    is in the printer, BLUE side DOWN,
+                </h2>
+                <h2>
+                    then press print below
+                </h2>
+                <pr>
+                    {{ form.submit(id='larger') }}{{ form.cancel(id='larger') }}
+                </pr>
+            </div>
+        </form>
+        <br>
+        <br>
+        <br>
+        <br>
+    </body>
+</html>

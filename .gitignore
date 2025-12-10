@@ -1,0 +1,16 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Other
+addressData.csv
+saved-files/
+toBePrinted/label.pdf
+app/static/chosen_sticker.png

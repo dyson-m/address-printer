@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+    <head>
+        <title>{{ title }} - Sticker Printer</title>
+        <style>
+            #larger {
+                font-size: 40px;
+                }
+            h2 {
+                font-size: 40px;
+            }
+        </style>
+
+    </head>
+    <body>
+        <form action="" method="POST" novalidate>
+            {{ form.hidden_tag() }}
+            <h2>{{ address.prompt }}</h2>
+            <pr>
+                {{ form.inputLine(id='larger') }}  {{ form.submit(id='larger') }}
+            </pr>
+            <br>
+            <h2>
+                {{ address.line0 }}
+            </h2>
+            <h2>
+                {{ address.line1 }}
+            </h2>
+            <h2>
+                {{ address.line2 }}
+            </h2>
+        </form>
+    </body>
+</html>
