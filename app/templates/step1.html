@@ -1,35 +1,23 @@
 <!doctype html>
 <html>
-    <head>
-        <title>{{ title }} - Sticker Printer</title>
-        <style>
-            #large {
-                font-size: 30px;
-            }
-            #larger {
-                font-size: 40px;
-                }
-            h2 {
-                font-size: 40px;
-            }
-        </style>
+<head>
+    <title>{{ title }} - Sticker Printer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <form action="" method="POST" novalidate>
+        {{ form.hidden_tag() }}
 
-    </head>
-    <body>
-        <form action="" method="POST" novalidate>
-            {{ form.hidden_tag() }}
-            <h2>Hello, {{ user.username }}!</h2>
-            <h2>Choose Address:</h2>
-            <pr>
-                {{ form.whichAddress(id='large') }}
-            </pr>
-            <br>
-            <br>
-            <br>
-            <br>
-            <h2>
-                {{ form.submit(id='larger') }}
-            </h2>
-        </form>
-    </body>
+        <h2>Hello, {{ user.username }}!</h2>
+        <h2>Choose Address:</h2>
+
+        {{ form.whichAddress(class='large') }}
+
+        <br><br><br><br>
+
+        <h2>
+            {{ form.submit(class='btn') }}
+        </h2>
+    </form>
+</body>
 </html>

@@ -1,0 +1,42 @@
+/* Headings */
+h2 {
+    font-size: 45px;
+}
+
+/* Form control sizes */
+.large {
+    font-size: 30px;
+}
+
+.larger {
+    font-size: 40px;
+}
+
+/* Base button style */
+.btn {
+    font-size: 40px;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* Color variants */
+
+.btn-green {
+    background-color: #4CAF50;
+}
+
+.btn-orange {
+    background-color: #FF8C00;
+}
+
+.btn-red {
+    background-color: #ff0000;
+}
+
+/* Image helpers */
+.img-left {
+    float: left;
+}
