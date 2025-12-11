@@ -4,15 +4,19 @@
     <form action="" method="POST" novalidate>
         {{ form.hidden_tag() }}
 
-        <h2>Hello, {{ user.username }}!</h2>
-        <h2>Choose Address:</h2>
+        <h2>Hello, {{ user.username }}! Choose Address:</h2>
 
         {{ form.whichAddress(class='large') }}
 
-        <br><br><br><br>
+        <br><br>
 
         <h2>
             {{ form.submit(class='btn') }}
+        </h2>
+        <br>
+        <h2 style="line-height: 6.5rem;">
+            {{ form.edit(class='btn btn-orange') }} {{ form.new(class='btn btn-green') }}
+            <!-- {{ form.bulk(class='btn btn-prismarine') }} -->
         </h2>
     </form>
 {% endblock %}

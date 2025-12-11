@@ -1,11 +1,12 @@
-from flask import render_template, redirect
+from flask import render_template, redirect, request
 from app import app
-from app.forms import PickAddressForm, EnterLineForm, PrintButtonForm
+from app.forms import PickAddressForm, EnterLineForm, PrintButtonForm, EditAddressForm
+from werkzeug.datastructures import MultiDict
 from app.printer import Print
 
 printObj = Print()
 
-
+@app.route('/index', methods=['GET', 'POST'])
 @app.route('/', methods=['GET', 'POST'])
 def step1():
 
@@ -15,7 +16,14 @@ def step1():
 
     if form.validate_on_submit():
         printObj.set_chosenAddress(form.whichAddress.data)
-        return redirect('/step2')
+
+        # branch depending on which button was pressed
+        if form.edit.data: # "Edit Address" button pressed
+            return redirect('/edit')
+        elif form.new.data: # "Add Address" button pressed
+            return redirect('/edit?add=1')
+        else:
+            return redirect('/step2')
         
     return render_template('step1.html', title='Step 1', user=user, form=form)
 
@@ -66,3 +74,76 @@ def sticker(stickerNum):
             return redirect('/')
 
     return render_template('verify.html', title="Verify", address=address, form=form)
+
+@app.route('/edit', methods=['GET', 'POST'])
+def edit():
+    
+    # Default values are for "Add Address"
+    address = {}
+    show_delete = False
+    title = "Add Address"
+
+    address_is_valid = True
+
+    # If actually editing, change values and fill address
+    if request.args.get("add") != '1':
+        show_delete = True
+        title = "Edit Address"
+        address["line0"] = printObj.getAddLine0()
+        address["line1"] = printObj.getAddLine1()
+        address["line2"] = printObj.getAddLine2()
+
+    form = EditAddressForm(data=MultiDict(address))
+    if form.validate_on_submit():
+        if form.cancel.data:
+            return redirect('/')
+            #If cancel is pressed, exit asap before stuff happens
+
+        # TODO: create CSV object w/ OG address & inputted address
+        print(form.line0.data)
+        print(form.line1.data)
+        print(form.line2.data)
+
+        if form.delete.data:
+            # TODO: handle delete logic
+            return redirect('/')
+        
+        address_is_valid = False # TODO: add validity check
+        force_save = request.form.get('force_save') == '1'
+
+        if not address_is_valid and not force_save:
+            # This is when we ask user 'are you sure' when address invalid
+            return render_template(
+                "edit.html",
+                title=title,
+                form=form,
+                address=form.data,
+                show_delete=show_delete,
+                address_is_valid=False,
+                show_success=False,
+                need_confirm=True
+            )
+        
+        # At this point, the address is already valid or user has confirmed twice
+
+        # TODO: write to CSV
+
+        return render_template(
+            "edit.html",
+            title=title,
+            form=form,
+            address=form.data,
+            show_delete=show_delete,
+            address_is_valid=True,
+            show_success=True,
+            need_confirm=False
+        )
+    
+    return render_template('edit.html', 
+                           title="Edit Address", 
+                           form=form, 
+                           address=address, 
+                           show_delete=show_delete,
+                           address_is_valid=address_is_valid,
+                           show_success=False,
+                           need_confirm=False)
