@@ -18,7 +18,7 @@
         <h2>{{ form.line1(class="larger") }} ⬅ Address & Street</h2>
         <h2>{{ form.line2(class="larger") }} ⬅ City, State & Zipcode</h2>
 
-        <h2>
+        <h2 id="button-row">
             {{ form.submit(class_="btn", id="save-button") }}
             {{ form.cancel(class_="btn btn-gray", id="cancel-button") }}
             {% if show_delete %}
@@ -29,9 +29,31 @@
     {# Simple toast element #}
     <div id="toast" class="toast">Placeholder</div>
     <script>
+
+        function positionToastAboveButtons() {
+            const toast = document.getElementById("toast");
+            const actions = document.getElementById("button-row");
+            if (!toast || !actions) return;
+
+            const actionsRect = actions.getBoundingClientRect();
+            const viewportH = window.innerHeight;
+
+            // distance from bottom of viewport to top of the action row
+            const bottomGapPx = Math.max(0, viewportH - actionsRect.top);
+
+            // small breathing room so toast doesn't touch buttons
+            const paddingPx = 8;
+
+            toast.style.bottom = (bottomGapPx + paddingPx) + "px";
+        }
+
+
         function showToast(msg, durationMs = 2500) {
             const toast = document.getElementById("toast");
             toast.textContent = msg;
+
+            positionToastAboveButtons();
+
             toast.classList.add("show");
 
             if (durationMs !== null) {
@@ -148,6 +170,11 @@
                     return; 
                 }
             });
+            
+            positionToastAboveButtons();
+            window.addEventListener("resize", positionToastAboveButtons);
+            window.addEventListener("orientationchange", positionToastAboveButtons);
+
         });
     </script>
 {% endblock %}

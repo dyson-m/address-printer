@@ -59,8 +59,9 @@ form select {
 /* Toast */
 .toast {
     position: fixed;
-    top: 0;
+    top: auto;
     left: 0;
+    right: 0;
     width: 100vw;
 
     /* Take up top half */
