@@ -11,6 +11,7 @@ wheels/
 
 # Other
 addressData.csv
+address_changelog.log
 saved-files/
 toBePrinted/label.pdf
 app/static/chosen_sticker.png
