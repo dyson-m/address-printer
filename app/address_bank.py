@@ -72,6 +72,8 @@ def ex_guard(action: str):
 
                 return data, None
             except Exception as e:
+                if AUDIT_EN:
+                    audit.exception("!CSV! %s failed", action.upper())
                 return None, f"[CSV:{action}] {e}"
         return wrapper
     return decorator
@@ -124,6 +126,8 @@ def delAddress(address) -> bool:
 def writeAddress(newAddress, oldAddress=None) -> bool:
     tempRows = []
     if oldAddress:
+        if newAddress == oldAddress:
+            raise TypeError("Address unchanged")
         with open(address_file, newline='') as f:
             reader = csv.reader(f)
             for row in reader:
