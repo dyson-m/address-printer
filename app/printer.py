@@ -8,6 +8,9 @@ class Print:
         self._firstLine = ""
         self._stickerLocation = 0
 
+    def getAddLine0(self):
+        return self._chosenAddress[0]
+
     def getAddLine1(self):
         return self._chosenAddress[1]
     
