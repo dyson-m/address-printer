@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import SelectField, SubmitField, StringField
 from wtforms.validators import DataRequired
-import csv
+from app.address_bank import readAddresses
 
 class PickAddressForm(FlaskForm):
 
@@ -10,12 +10,11 @@ class PickAddressForm(FlaskForm):
     
     def refreshAddresses(self):
         addressChoices = []
-        with open('addressData.csv', newline='') as dataFile:
-            fileReader = csv.reader(dataFile, dialect="excel")
-            addressChoices.append("PRESS HERE TO CHOOSE")
-                # Default/first option that functions as "no selection"
-            for row in fileReader:
-                addressChoices.append(' | '.join(row))
+        addresses, _ = readAddresses()
+        addressChoices.append("PRESS HERE TO CHOOSE")
+            # Default/first option that functions as "no selection"
+        for row in addresses:
+            addressChoices.append(' | '.join(row))
         self.whichAddress.choices = addressChoices
 
     def __init__(self, *args, **kwargs):
@@ -31,8 +30,8 @@ class PickAddressForm(FlaskForm):
     new = SubmitField("ADD NEW ADDRESS")
     """Add a new address to the csv"""
 
-    # bulk = SubmitField("PRINT MULTIPLE ADDRESSES")
-    # """Select and print multiple addresses at once"""
+    bulk = SubmitField("PRINT MULTIPLE ADDRESSES")
+    """Select and print multiple addresses at once""" 
 
 class EnterLineForm(FlaskForm):
     inputLine = StringField()

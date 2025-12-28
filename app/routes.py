@@ -3,6 +3,7 @@ from app import app
 from app.forms import PickAddressForm, EnterLineForm, PrintButtonForm, EditAddressForm
 from werkzeug.datastructures import MultiDict
 from app.printer import Print
+import app.address_bank as adb
 
 printObj = Print()
 
@@ -99,16 +100,31 @@ def edit():
             return redirect('/')
             #If cancel is pressed, exit asap before stuff happens
 
-        # TODO: create CSV object w/ OG address & inputted address
-        print(form.line0.data)
-        print(form.line1.data)
-        print(form.line2.data)
-
         if form.delete.data:
-            # TODO: handle delete logic
-            return redirect('/')
+            _, err = adb.delAddress(list(address.values()))
+            if err:
+                is_error = True
+                success_message = err
+            else:
+                is_error = False
+                success_message = "Address has been deleted"
+
+            return render_template(
+                "edit.html",
+                title=title,
+                form=form,
+                address=form.data,
+                show_delete=show_delete,
+                address_is_valid=False,
+                need_confirm=False, 
+                success_message=success_message,
+                is_error=is_error
+            )
         
-        address_is_valid = False # TODO: add validity check
+        address_is_valid, err = adb.validateAddress(
+            [form.line0.data, form.line1.data, form.line2.data]
+        )
+
         force_save = request.form.get('force_save') == '1'
 
         if not address_is_valid and not force_save:
@@ -120,13 +136,31 @@ def edit():
                 address=form.data,
                 show_delete=show_delete,
                 address_is_valid=False,
-                show_success=False,
-                need_confirm=True
+                need_confirm=True,
+                success_message=None,
+                is_error=False
             )
         
         # At this point, the address is already valid or user has confirmed twice
+        # Write address:
+        
+        newAddress = [form.line0.data, form.line1.data, form.line2.data]
 
-        # TODO: write to CSV
+        # If we are editing an existing address, show_delete is True
+        if show_delete:
+            oldAddress = list(address.values())
+            success_message = "Address has been changed"
+        else:
+            oldAddress = None
+            success_message = "Address has been added"
+        
+        _, err = adb.writeAddress(newAddress, oldAddress)
+        
+        if err:
+            is_error = True
+            success_message = err
+        else:
+            is_error = False
 
         return render_template(
             "edit.html",
@@ -135,15 +169,19 @@ def edit():
             address=form.data,
             show_delete=show_delete,
             address_is_valid=True,
-            show_success=True,
-            need_confirm=False
+            need_confirm=False,
+            success_message=success_message,
+            is_error=is_error
         )
     
+    # Default (on first visit)
     return render_template('edit.html', 
                            title="Edit Address", 
                            form=form, 
                            address=address, 
                            show_delete=show_delete,
                            address_is_valid=address_is_valid,
-                           show_success=False,
-                           need_confirm=False)
+                           need_confirm=False,
+                           success_message=None,
+                           is_error=False
+                           )

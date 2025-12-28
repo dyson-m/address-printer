@@ -9,9 +9,9 @@
 
         {# flags for JS #}
         <div id="flags"
-             data-address-valid="{{ '1' if address_is_valid else '0' }}"
-             data-show-success="{{ '1' if show_success else '0' }}"
-            data-need-confirm="{{ '1' if need_confirm else '0' }}">
+            data-address-valid="{{ '1' if address_is_valid else '0' }}"
+            data-need-confirm="{{ '1' if need_confirm else '0' }}"
+            data-success-msg="{{ success_message|default('', true)|e }}">
         </div>
 
         <h2>{{ form.line0(class="larger") }} ⬅ Name</h2>
@@ -51,14 +51,14 @@
             const line2Input = document.getElementById("line2");
 
             const isAddressValid = flags.dataset.addressValid === "1";
-            const showSuccess = flags.dataset.showSuccess === "1";
+            const successMsg = flags.dataset.successMsg;
             const needConfirm = flags.dataset.needConfirm === "1";
 
             const saveButtonId = "save-button";
             const deleteButtonId = "delete-button";
 
             // 1) Success → toast, then redirect in 4 seconds 
-            if (showSuccess) {
+            if (successMsg) {
 
                 // Disable all action buttons immediately
                 const saveBtn   = document.getElementById("save-button");
@@ -78,7 +78,7 @@
                 });
 
                 // Show the banner toast
-                showToast("Address updated!", 4000);
+                showToast(successMsg, 4000);
 
                 // Redirect after timeout
                 setTimeout(() => {
@@ -88,7 +88,7 @@
 
             // 2) Invalid from server → show toast immediately, and mark this page as "confirmed if you submit again"
             if (needConfirm && !isAddressValid) {
-                showToast("Invalid Address. Are you sure? Press save again to confirm.", 8000);
+                showToast("Invalid Address. Are you sure? Press save again to continue anyway.", 8000);
                 forceField.value = "1";  // next submit will be treated as forced
 
                 // Timeout window: if Save not pressed within X seconds, invalidate confirmation
@@ -133,11 +133,11 @@
                         e.preventDefault();  // block first submit
 
                         deleteConfirmActive = true;
-                        showToast("DELETE ADDRESS? ARE YOU SURE? Press again to permanently delete address.", 3000);
+                        showToast("DELETE ADDRESS? ARE YOU SURE? Press again to permanently delete address.", 5000);
 
                         deleteConfirmTimer = setTimeout(() => {
                             deleteConfirmActive = false;
-                        }, 3000);
+                        }, 5000);
 
                     } else {
                         // Second click within 3 seconds: allow form to submit normally
