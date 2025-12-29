@@ -56,6 +56,35 @@ form select {
     float: left;
 }
 
+/* Bulk */
+.addr-row {
+display: grid;
+grid-template-columns: 40px 1fr;
+align-items: center;
+gap: 5vw;
+padding-left: 10vw;
+}
+
+.addr-text {
+padding-top: 2vh;
+padding-bottom: 2vh;
+line-height: 1.5;
+}
+
+.big-checkbox {
+  zoom: 2;
+  transform: scale(2);
+  -ms-transform: scale(2);
+  -webkit-transform: scale(2);
+  -o-transform: scale(2);
+  -moz-transform: scale(2);
+  transform-origin: 0 0;
+  -ms-transform-origin: 0 0;
+  -webkit-transform-origin: 0 0;
+  -o-transform-origin: 0 0;
+  -moz-transform-origin: 0 0;
+}
+
 /* Toast */
 .toast {
     position: fixed;

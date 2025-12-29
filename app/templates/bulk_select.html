@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>
+    Fill checkbox for every address you want to print at once. 
+    Press CONTINUE at the bottom when you're done.
+    <br>
+    <form method="POST" action="{{ url_for('bulk_edit') }}">
+        {% for addr in addresses %}
+            <div class="addr-row">
+            <input type="checkbox"
+                    class="big-checkbox"
+                    name="selected"
+                    value="{{ (addr | tojson) | b64_encode }}"
+                    style="transform: scale(1.5);">
+
+            <div class="addr-text">
+                {{ addr[0] }}<br>{{ addr[1] }}<br>{{ addr[2] }}
+            </div>
+            </div>
+            <hr>
+        {% endfor %}
+        
+        <div style="padding-left: 15vw">
+            <button class="btn" type="submit">CONTINUE</button>
+            <button type="button"
+                class="btn btn-red"
+                onclick="window.location.href='/'">
+                CANCEL
+            </button>
+        </div>
+    </form>
+    </h2>
+{% endblock %}

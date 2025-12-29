@@ -1,5 +1,6 @@
-from flask import render_template, redirect, request
+from flask import render_template, redirect, request, url_for
 from app import app
+import json, base64
 from app.forms import PickAddressForm, EnterLineForm, PrintButtonForm, EditAddressForm
 from werkzeug.datastructures import MultiDict
 from app.printer import Print
@@ -23,6 +24,8 @@ def step1():
             return redirect('/edit')
         elif form.new.data: # "Add Address" button pressed
             return redirect('/edit?add=1')
+        elif form.bulk.data:
+            return redirect('/bulk/select')
         else:
             return redirect('/step2')
         
@@ -75,6 +78,33 @@ def sticker(stickerNum):
             return redirect('/')
 
     return render_template('verify.html', title="Verify", address=address, form=form)
+
+@app.get('/bulk/select')
+def bulk_select():
+    addresses, _ = adb.readAddresses()
+    return render_template("bulk_select.html", addresses=addresses)
+
+@app.post('/bulk/edit')
+def bulk_edit():
+    # Each checkbox submits a base64 encoded JSON string
+    selected_base64 = request.form.getlist("selected")
+    selected = [json.loads(base64.b64decode(s).decode("utf-8")) for s in selected_base64]
+    return render_template("bulk_edit.html", selected=selected)
+
+@app.post("/bulk/sticker")
+def bulk_sticker():
+    line0 = request.form.getlist("line0") # can be changed
+    line1 = request.form.getlist("line1")  
+    line2 = request.form.getlist("line2")
+
+    bulk_addresses = [[a, b, c] for a, b, c in zip(line0, line1, line2)]
+
+    print(bulk_addresses)
+    #TODO: add bulk_addresses to print object in some fashion
+
+    #TODO: find a way to loop sticker selection and track remaining # left to pick
+    return None #render_template("bulk_sticker.html")
+
 
 @app.route('/edit', methods=['GET', 'POST'])
 def edit():

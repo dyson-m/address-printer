@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>
+    If you want to change the PERSON'S NAME for any of the addresses, do so below
+    <br><br>
+    <form method="POST" action="{{ url_for('bulk_sticker') }}">
+        {% for addr in selected %}
+            <br>
+            <div style="line-height: 2; padding-left: 5vw;">
+
+            <!-- keep other lines as hidden arrays -->
+            <input type="hidden" name="line1" value="{{ addr[1] }}">
+            <input type="hidden" name="line2" value="{{ addr[2] }}">
+
+            <!-- editable line1 -->
+            <input type="text" name="line0" value="{{ addr[0] }}" style="width: 60%; font-size: 1em;">
+            <br>{{ addr[1] }}
+            <br>{{ addr[2] }}
+            </div>
+
+            <hr>
+        {% endfor %}
+
+        <div style="padding-left: 5vw">
+            <button class="btn" type="submit">CONTINUE</button>
+            <button type="button"
+                class="btn btn-red"
+                onclick="window.location.href='/'">
+                CANCEL
+            </button>
+        </div>
+    </form>
+    </h2>
+
+
+{% endblock %}
